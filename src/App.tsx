@@ -1,13 +1,17 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
+import { Router } from './routing';
+import './App.css';
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
-      {/* App content goes here */}
+        <Router />
       </BrowserRouter>
     </QueryClientProvider>
   );
