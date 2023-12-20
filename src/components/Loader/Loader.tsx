@@ -42,7 +42,7 @@ export const Loader = () => {
         r="0"
         fill="none"
         stroke="#546fbe"
-        stroke-width="7"
+        strokeWidth="7"
       >
         <animate
           attributeName="r"
