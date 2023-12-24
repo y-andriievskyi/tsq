@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { CreateUserRequest, UserService } from "../services/UserService";
+import { CreateUserRequest, IUser, UserService } from "../services/UserService";
 
 export const useUsers = () => {
   const staleTime = 60000; // default 0 - always will be considered stale; Infinity - never will be considered stale;
@@ -15,7 +15,7 @@ export const useUsers = () => {
     return UserService.getUsers();
   }
 
-  const { data, isLoading, isFetching, isError } = useQuery(GET_USERS_QUERY, getUsers, {
+  const { data: users, isLoading, isFetching, isError } = useQuery(GET_USERS_QUERY, getUsers, {
     staleTime,
   });
 
@@ -24,13 +24,17 @@ export const useUsers = () => {
     mutationFn: (newUser: CreateUserRequest) => {
       return UserService.createUser(newUser);
     },
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({ queryKey: [GET_USERS_QUERY] })
+    onSuccess: (data: IUser) => {
+      const currentData = queryClient.getQueryData([GET_USERS_QUERY]) as IUser[];
+      queryClient.setQueryData([GET_USERS_QUERY], [...currentData, data]);
     },
+    // onSettled: async () => {
+    //   return await queryClient.invalidateQueries({ queryKey: [GET_USER_TODOS_QUERY] })
+    // }
   });
 
   return {
-    data,
+    users,
     isFetching,
     isLoading,
     isError,

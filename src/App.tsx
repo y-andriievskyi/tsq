@@ -4,7 +4,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { Router } from './routing';
 import './App.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 10000,
+    },
+  },
+});
 
 const App = () => {
   return (

@@ -1,3 +1,4 @@
+import { ITodo } from "./TodoService";
 import { baseUrl } from "./config";
 
 export interface IUser {
@@ -9,7 +10,7 @@ export interface CreateUserRequest {
   username: string;
 }
 
-const usersUrl = `${baseUrl}/users/`;
+const usersUrl = `${baseUrl}/users`;
 
 export class UserService {
   static async getUsers(): Promise<IUser[]> {
@@ -29,7 +30,7 @@ export class UserService {
     return json;
   }
 
-  static async createUser(newUser: CreateUserRequest): Promise<IUser[]> {
+  static async createUser(newUser: CreateUserRequest): Promise<IUser> {
     const url = usersUrl;
 
     const response = await fetch(url, {
@@ -41,15 +42,21 @@ export class UserService {
         "Content-type": "application/json; charset=UTF-8"
       }
     });
-    console.log(response);
     
     if (!response.ok) {
       const json = await response.json();
-      console.log(json);
-      
       throw new Error(json.message);
     }
 
     return response.json();
+  }
+
+  static async getTodos(userId: string): Promise<ITodo[]> {
+    const url = `${usersUrl}/${userId}/todos`;
+
+    const response = await fetch(url);
+    const json = await response.json();
+
+    return json;
   }
 }

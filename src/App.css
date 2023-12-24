@@ -1,77 +1,191 @@
-.page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-block: 40px;
+.css-loader {
+  width: 15px;
+  height: 15px;
+  border: 2px solid red;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
-.page h1 {
-    text-align: center;
-    margin-bottom: 30px;
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 30px;
+  gap: 15px;
+}
+
+.nav h1 {
+  position: relative;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.nav .with-back a {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-120%, -50%);
+  font-size: 15px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
 }
 
 .users-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    max-width: 600px;
-    margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  max-width: 600px;
+  margin: auto;
 }
 
-.users-list a {
-    padding: 10px 20px;
-    border: 2px solid blue;
-    color: blue;
-    border-radius: 40px;
-    font-weight: bold;
-    transition: color .3s, background-color .3s;
-    transition-timing-function: ease-in-out;
+.users-list a,
+.todo-item {
+  padding: 10px 20px;
+  border: 2px solid blue;
+  line-height: 1;
+  color: blue;
+  border-radius: 40px;
+  font-weight: bold;
+  transition: color .3s, background-color .3s;
+  transition-timing-function: ease-in-out;
 }
 
 .users-list a:hover {
-    color: white;
-    background-color: blue;
+  color: white;
+  background-color: blue;
 }
 
 .form {
-    margin-bottom: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .form-wrapper {
-    display: flex;
-    display: flex;
-    align-items: start;
-    gap: 15px;
+  display: flex;
+  display: flex;
+  align-items: start;
+  gap: 15px;
 }
 
 .form input {
-    border: none;
-    background-color: transparent;
-    border-bottom: 2px solid blue;
-    padding: 4px 8px;
-    min-width: 200px;
-    font-size: 16px;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid blue;
+  padding: 4px 8px;
+  min-width: 200px;
+  font-size: 16px;
 }
 
 .form input:focus {
-    outline: none;
+  outline: none;
 }
 
 .form input::placeholder {
-    color: rgba(0, 0, 0, .3);
+  color: rgba(0, 0, 0, .3);
 }
 
 .form button {
-    border: none;
-    background-color: blue;
-    color: white;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: color.3s, background-color.3s;
-    transition-timing-function: ease-in-out;
+  border: none;
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: color.3s, background-color.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.todo .form input {
+  border-color: red;
+}
+
+.todo .form button {
+  background-color: red;
+}
+
+.todo-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: red;
+  border-color: red;
+  line-height: 1;
+  gap: 5px;
+}
+
+.todo-item:hover {
+  color: white;
+  background-color: red;
+}
+
+.todo-item:hover .css-loader {
+  border-color: white;
+  border-bottom-color: red;
+}
+
+.todo-item button {
+  position: relative;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  border: 1px solid red;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item button.completed {
+  background-color: red;
+}
+
+.todo-item button.completed::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 4px;
+  border: 2px solid white;
+  border-width: 0 0 2px 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: 4px 2px;
+}
+
+.todo-item button:hover {
+  border: 1px solid red;
+}
+
+.todo-item svg {
+  width: 15px;
+  height: 15px;
 }

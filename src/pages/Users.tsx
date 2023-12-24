@@ -1,37 +1,34 @@
-import { Link } from 'react-router-dom';
 import { Loader } from '../components';
 import { useUsers } from '../hooks';
 import { UserItem } from './components/UserItem';
 import { UserForm } from './components/UserForm';
-import { useMemo } from 'react';
 import { CreateUserRequest } from '../services/UserService';
+import { Navigation } from '../pages/components/Navigation';
 
 export const Users = () => {
-  const { data, isLoading, isError, createUser } = useUsers();
-  const loading = useMemo(() => {
-    return isLoading;
-  }, [isLoading]);
+  const { users, isLoading, isError, createUser } = useUsers();
 
   return (
-    <div className="page">
-      <h1>
-        <Link to={'/'}>Users</Link>
-      </h1>
-      <UserForm
-        handleSubmit={(data: CreateUserRequest) => createUser.mutate(data)}
-        isLoading={createUser.isLoading}
-        isError={createUser.isError}
-        error={createUser.error as { message: string }}
-        reset={() => createUser.reset()}
-      />
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="users-list">
-          {isError && <p>Error: {isError}</p>}
-          {data && data.map((user) => <UserItem key={user._id} user={user} />)}
-        </div>
-      )}
-    </div>
+    <>
+      <Navigation />
+      <div className="page">
+        <UserForm
+          handleSubmit={(data: CreateUserRequest) => createUser.mutate(data)}
+          isLoading={createUser.isLoading}
+          isError={createUser.isError}
+          error={createUser.error as { message: string }}
+          reset={() => createUser.reset()}
+        />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="users-list">
+            {isError && <p>Error: {isError}</p>}
+            {users &&
+              users.map((user) => <UserItem key={user._id} user={user} />)}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
