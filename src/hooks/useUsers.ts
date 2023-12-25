@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateUserRequest, IUser, UserService } from "../services/UserService";
 
 export const useUsers = () => {
@@ -15,7 +15,9 @@ export const useUsers = () => {
     return UserService.getUsers();
   }
 
-  const { data: users, isLoading, isFetching, isError } = useQuery(GET_USERS_QUERY, getUsers, {
+  const { data: users, isLoading, isFetching, isError } = useQuery({
+    queryKey: [GET_USERS_QUERY],
+    queryFn: getUsers,
     staleTime,
   });
 
@@ -25,7 +27,7 @@ export const useUsers = () => {
       return UserService.createUser(newUser);
     },
     onSuccess: (data: IUser) => {
-      const currentData = queryClient.getQueryData([GET_USERS_QUERY]) as IUser[];
+      const currentData = queryClient.getQueryData<IUser[]>([GET_USERS_QUERY])!;
       queryClient.setQueryData([GET_USERS_QUERY], [...currentData, data]);
     },
     // onSettled: async () => {

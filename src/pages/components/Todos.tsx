@@ -2,6 +2,7 @@ import { Loader } from '../../components';
 import { useUser } from '../../hooks/useUser';
 import {
   CreateTodoRequest,
+  ITodo,
   UpdateTodoRequest,
 } from '../../services/TodoService';
 import { TodoForm } from './TodoForm';
@@ -21,7 +22,7 @@ export const Todos = ({ userId }: { userId: string }) => {
       <TodoForm
         userId={userId}
         handleSubmit={(data: CreateTodoRequest) => createTodo.mutate(data)}
-        isLoading={createTodo.isLoading}
+        isLoading={createTodo.isPending}
         isError={createTodo.isError}
         error={createTodo.error as { message: string }}
         reset={() => createTodo.reset()}
@@ -32,11 +33,11 @@ export const Todos = ({ userId }: { userId: string }) => {
         <div className="todo-list">
           {isError && <p>Error: {isError}</p>}
           {todos &&
-            todos.map((todo) => (
+            todos.map((todo: ITodo) => (
               <TodoItem
                 key={todo._id}
                 todo={todo}
-                isUpdating={updateTodo.isLoading && updateTodo.variables?.id === todo._id}
+                isUpdating={updateTodo.isPending && updateTodo.variables?.id === todo._id}
                 completeTodo={completeTodo}
               />
             ))}

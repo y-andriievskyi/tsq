@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { UserService } from '../services/UserService';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { IUser, UserService } from '../services/UserService';
 import { CreateTodoRequest, ITodo, TodoService, UpdateTodoRequest } from '../services/TodoService';
 
 interface UseUserParams {
@@ -32,7 +32,9 @@ export const useUser = ({ userId }: UseUserParams) => {
     isLoading,
     isFetching,
     isError,
-  } = useQuery([GET_SINGLE_USER_QUERY, userId], getUser, {
+  } = useQuery<IUser>({
+    queryKey: [GET_SINGLE_USER_QUERY, userId],
+    queryFn: getUser,
     staleTime,
   });
 
@@ -41,8 +43,9 @@ export const useUser = ({ userId }: UseUserParams) => {
     isLoading: todosLoading,
     isFetching: todosFetching,
     isError: todosError,
-  } = useQuery([GET_USER_TODOS_QUERY, userId], getTodos, {
-    enabled: !!userId,
+  } = useQuery<ITodo[]>({
+    queryKey: [GET_USER_TODOS_QUERY, userId],
+    queryFn: getTodos,
     staleTime,
   });
 
@@ -52,7 +55,7 @@ export const useUser = ({ userId }: UseUserParams) => {
       return TodoService.createTodo(newTodo);
     },
     onSuccess: (data: ITodo) => {
-      const currentData = queryClient.getQueryData([GET_USER_TODOS_QUERY, userId]) as ITodo[];
+      const currentData = queryClient.getQueryData<ITodo[]>([GET_USER_TODOS_QUERY, userId])!;
       queryClient.setQueryData([GET_USER_TODOS_QUERY, userId], [...currentData, data]);
     },
     // onSettled: async () => {
@@ -64,20 +67,33 @@ export const useUser = ({ userId }: UseUserParams) => {
     return TodoService.updateTodo(id, params);
   }
 
-  const updateTodo = useMutation(async (params: UpdateTodoRequest & { id: string }) => {
-    const { id, ...todoParams } = params;
-    return await updateUserTodo(id, todoParams);
-  }, {
-    onSuccess: (data: ITodo) => {
-      
-      const currentData = queryClient.getQueryData([GET_USER_TODOS_QUERY, userId]) as ITodo[];
-      console.log(data, currentData);
-      currentData.find((todo) => todo._id === data._id)!.completed = data.completed;
-      queryClient.setQueryData([GET_USER_TODOS_QUERY, userId], [...currentData]);
+  const updateTodo = useMutation({
+    mutationFn: async (params: UpdateTodoRequest & { id: string }) => {
+      const { id, ...todoParams } = params;
+      return await updateUserTodo(id, todoParams);
     },
-    // onSettled: async () => {
-    //   return await queryClient.invalidateQueries({ queryKey: [GET_USER_TODOS_QUERY] })
-    // }
+    onSuccess: (updatedTodo: ITodo) => {
+      const previousTodos = queryClient.getQueryData<ITodo[]>([GET_USER_TODOS_QUERY, userId])!;
+      const mutatedTodo = previousTodos.find((todo) => todo._id === updatedTodo._id)!;
+      mutatedTodo.completed = updatedTodo.completed;
+      queryClient.setQueryData([GET_USER_TODOS_QUERY, userId], [...previousTodos]);
+    },
+    onMutate: async (params: UpdateTodoRequest & { id: string }) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: [GET_USER_TODOS_QUERY, userId] });
+  
+      const previousTodos = queryClient.getQueryData<ITodo[]>([GET_USER_TODOS_QUERY, userId]) || [];
+
+      const mutatedTodo = previousTodos.find((todo: ITodo) => todo._id === params.id)!;
+      mutatedTodo.completed = params.completed;
+  
+      // Optimistically update to the new value
+      queryClient.setQueryData([GET_USER_TODOS_QUERY, userId], (old: ITodo[]) => [...old]);
+  
+      // Return a context object with the snapshotted value
+      return { previousTodos }
+    },
   });
 
   return {
