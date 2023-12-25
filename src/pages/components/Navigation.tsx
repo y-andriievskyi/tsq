@@ -10,6 +10,10 @@ export const Navigation = () => {
         <h1>
           <NavLink to={'/'}>Users</NavLink>
         </h1>
+        {' / '}
+        <h1>
+          <NavLink to={'/extra'}>Extra</NavLink>
+        </h1>
       </nav>
     );
   }

@@ -25,12 +25,17 @@
   justify-content: center;
   padding-block: 30px;
   gap: 15px;
+  font-size: 3.2em;
+  line-height: 1;
 }
 
 .nav h1 {
   position: relative;
   text-align: center;
   margin-bottom: 30px;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
 }
 
 .nav .with-back a {
@@ -46,6 +51,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-inline: 15px;
   padding-bottom: 40px;
 }
 
@@ -164,7 +170,8 @@
   margin: 0;
 }
 
-.todo-item button:active, .todo-item button:focus  {
+.todo-item button:active,
+.todo-item button:focus {
   outline: red;
 }
 
@@ -192,4 +199,31 @@
 .todo-item svg {
   width: 15px;
   height: 15px;
+}
+
+section {
+  /* width: 1300px; */
+  display: block;
+  width: 100%;
+  padding: 20px 0;
+}
+
+section ol {
+  margin: 0;
+}
+
+section img {
+  object-fit: cover;
+  width: 950px;
+  height: 310px;
+}
+
+section h2:first-child, section h3:first-child {
+  margin-top: 0;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 }
