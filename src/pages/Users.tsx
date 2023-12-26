@@ -7,10 +7,7 @@ import { useMemo } from 'react';
 import { CreateUserRequest } from '../services/UserService';
 
 export const Users = () => {
-  const { data, isLoading, isError, createUser } = useUsers();
-  const loading = useMemo(() => {
-    return isLoading;
-  }, [isLoading]);
+  const { data, isPending, isError, createUser } = useUsers();
 
   return (
     <div className="page">
@@ -19,12 +16,12 @@ export const Users = () => {
       </h1>
       <UserForm
         handleSubmit={(data: CreateUserRequest) => createUser.mutate(data)}
-        isLoading={createUser.isLoading}
+        isLoading={createUser.isPending}
         isError={createUser.isError}
         error={createUser.error as { message: string }}
         reset={() => createUser.reset()}
       />
-      {loading ? (
+      {isPending ? (
         <Loader />
       ) : (
         <div className="users-list">
