@@ -29,8 +29,7 @@ export const useUser = ({ userId }: UseUserParams) => {
   // const { data: user, isLoading, isFetching, isError } = useQuery([GET_SINGLE_USER_QUERY], getUser, {
   const {
     data: user,
-    isLoading,
-    isFetching,
+    isPending,
     isError,
   } = useQuery<IUser>({
     queryKey: [GET_SINGLE_USER_QUERY, userId],
@@ -40,8 +39,7 @@ export const useUser = ({ userId }: UseUserParams) => {
 
   const {
     data: todos,
-    isLoading: todosLoading,
-    isFetching: todosFetching,
+    isPending: todosPending,
     isError: todosError,
   } = useQuery<ITodo[]>({
     queryKey: [GET_USER_TODOS_QUERY, userId],
@@ -99,13 +97,11 @@ export const useUser = ({ userId }: UseUserParams) => {
   return {
     queries,
     user,
-    isFetching,
-    isLoading,
+    isPending,
     isError,
     todos,
     todosError,
-    todosLoading,
-    todosFetching,
+    todosPending,
     createTodo,
     updateTodo,
   };

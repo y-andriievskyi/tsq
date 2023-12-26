@@ -14,13 +14,13 @@ export const Navigation = () => {
     );
   }
 
-  const { user, isLoading } = useUser({
+  const { user, isPending } = useUser({
     userId,
   });
 
   return (
     <nav className="nav">
-      {!isLoading && (
+      {!isPending && (
         <h1 className="with-back">
           <NavLink to={'/'}>{'< Back'}</NavLink>
           {user?.username}

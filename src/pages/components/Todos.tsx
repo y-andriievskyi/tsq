@@ -9,7 +9,7 @@ import { TodoForm } from './TodoForm';
 import { TodoItem } from './TodoItem';
 
 export const Todos = ({ userId }: { userId: string }) => {
-  const { todos, isLoading, isError, createTodo, updateTodo } = useUser({
+  const { todos, isPending, isError, createTodo, updateTodo } = useUser({
     userId,
   });
 
@@ -27,7 +27,7 @@ export const Todos = ({ userId }: { userId: string }) => {
         error={createTodo.error as { message: string }}
         reset={() => createTodo.reset()}
       />
-      {isLoading ? (
+      {isPending ? (
         <Loader />
       ) : (
         <div className="todo-list">

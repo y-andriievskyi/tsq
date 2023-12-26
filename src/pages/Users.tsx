@@ -6,7 +6,7 @@ import { CreateUserRequest, IUser } from '../services/UserService';
 import { Navigation } from '../pages/components/Navigation';
 
 export const Users = () => {
-  const { users, isLoading, isError, createUser } = useUsers();
+  const { users, isPending, isError, createUser } = useUsers();
 
   return (
     <>
@@ -19,7 +19,7 @@ export const Users = () => {
           error={createUser.error as { message: string }}
           reset={() => createUser.reset()}
         />
-        {isLoading ? (
+        {isPending ? (
           <Loader />
         ) : (
           <div className="users-list">

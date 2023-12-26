@@ -6,13 +6,13 @@ import { Navigation } from '../pages/components/Navigation';
 
 export const User = () => {
   const { userId } = useParams() as { userId: string };
-  const { isLoading } = useUser({ userId });
+  const { isPending } = useUser({ userId });
 
   return (
     <>
       <Navigation />
       <div className="page">
-        {isLoading ? (
+        {isPending ? (
           <Loader />
         ) : (
           <div className="user">

@@ -15,7 +15,7 @@ export const useUsers = () => {
     return UserService.getUsers();
   }
 
-  const { data: users, isLoading, isFetching, isError } = useQuery({
+  const { data: users, isPending, isError } = useQuery({
     queryKey: [GET_USERS_QUERY],
     queryFn: getUsers,
     staleTime,
@@ -37,8 +37,7 @@ export const useUsers = () => {
 
   return {
     users,
-    isFetching,
-    isLoading,
+    isPending,
     isError,
     queries,
     createUser,
